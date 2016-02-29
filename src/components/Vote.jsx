@@ -1,6 +1,8 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import classNames from 'classnames'
+let voteArray = [];
+let uniqVote = [];
 
 export default React.createClass({
   mixins: [PureRenderMixin],
@@ -8,10 +10,24 @@ export default React.createClass({
     return this.props.pair || [];
   },
   isDisabled: function() {
-    return !!this.props.hasVoted;
+    if(this.props.hasVoted !== undefined)
+    {
+      voteArray.push(this.props.hasVoted);
+      uniqVote = [ ...new Set(voteArray) ]; 
+    }
+    if(uniqVote.length == 2) {
+      return !!this.props.hasVoted;
+    } else {
+      return false;
+    }
   },
   hasVotedFor: function(entry) {
-    return this.props.hasVoted === entry;
+    if(this.props.hasVoted !== undefined)
+    {
+      voteArray.push(this.props.hasVoted);
+      uniqVote = [ ...new Set(voteArray) ]; 
+    }
+    return uniqVote.indexOf(entry) !== -1;
   },
   render: function() {
     return <div className="voting ui inverted segment">
